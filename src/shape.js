@@ -124,6 +124,19 @@ Shape.prototype.stop = function stop() {
     this._progressPath.stop();
 };
 
+Shape.prototype.cancel = function cancel() {
+    if (this._progressPath === null) {
+        throw new Error(DESTROYED_ERROR);
+    }
+
+    // Don't crash if cancel is called inside step function
+    if (this._progressPath === undefined) {
+        return;
+    }
+
+    this._progressPath.cancel();
+};
+
 Shape.prototype.pause = function pause() {
     if (this._progressPath === null) {
         throw new Error(DESTROYED_ERROR);
