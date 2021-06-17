@@ -191,6 +191,11 @@ Path.prototype.stop = function stop() {
     this.path.style.strokeDashoffset = this._getComputedDashOffset();
 };
 
+Path.prototype.cancel = function cancel() {
+    this._cancelTween();
+    this.path.style.strokeDashoffset = this._getComputedDashOffset();
+};
+
 // Method introduced here:
 // http://jakearchibald.com/2013/animated-line-drawing-svg/
 Path.prototype.animate = function animate(progress, opts, cb) {
@@ -280,6 +285,13 @@ Path.prototype._calculateTo = function _calculateTo(progress, easing) {
 Path.prototype._stopTween = function _stopTween() {
     if (this._tweenable !== null) {
         this._tweenable.stop(true);
+        this._tweenable = null;
+    }
+};
+
+Path.prototype._cancelTween = function _cancelTween() {
+    if (this._tweenable !== null) {
+        this._tweenable.cancel(true);
         this._tweenable = null;
     }
 };
@@ -469,6 +481,19 @@ Shape.prototype.stop = function stop() {
     }
 
     this._progressPath.stop();
+};
+
+Shape.prototype.cancel = function cancel() {
+    if (this._progressPath === null) {
+        throw new Error(DESTROYED_ERROR);
+    }
+
+    // Don't crash if cancel is called inside step function
+    if (this._progressPath === undefined) {
+        return;
+    }
+
+    this._progressPath.cancel();
 };
 
 Shape.prototype.pause = function pause() {

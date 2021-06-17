@@ -45,7 +45,8 @@
     "serve": "static ./local-dev -c 0",
     "lint": "./tools/lint.sh",
     "jscs": "jscs ./src ./test",
-    "eslint": "eslint --ext .js ./src ./test"
+    "eslint": "eslint --ext .js ./src ./test",
+    "build": "grunt build"
   },
   "repository": {
     "type": "git",
